@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<title>JSON (+RPC) - README.html</title>
+		<style>h1,h2{ margin-bottom:0; } h2,p.p2{margin-left:20px;} p{margin-top:0;}</style>
+	</head>
+	<body>
+		<h1>JSON (+RPC)</h1>
+		This is a fork of the very nice reference implementation by 
+		<a href="https://en.wikipedia.org/wiki/Douglas_Crockford">Douglas Crockford</a>, 
+		provided at <a href="http://JSON.org">JSON.org</a>, 
+		(which is based on <a href="http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf">ECMA-404</a>, 
+		"The JSON Data Interchange Standard"
+		and also documented as <a href="https://www.ietf.org/rfc/rfc4627.txt">RFC 4627</a>).  
+		Unfortunately, when I asked Mr Crockford via email to consider extending his work to include RPC, he succinctly replied, "I don't believe in RPC."  
+		However, he had previously welcomed me to publish any extensions myself.
+		So this is my result.  
+		There are three additions to the base code:
+		<ol>
+			<li>Added three classes to support <a href="http://www.jsonrpc.org">JSON-RPC v2.0</a>: <code>RPCError</code>, <code>RPCRequest</code>, and <code>RPCResponse</code></li>
+			<li>Added support for comments in JSON syntax, when a line <strong>begins</strong> (<em>No leading white space!</em>) with a hash mark ('#')</li>
+			<li>Added a utility method, <code>JSONObject.keySet()</code></li>
+		</ol>
+		<h2>Compatibility</h2>
+		<p class='p2'>This library should be backward compatible with any projects that used the JSON.org reference implementation.</p>
+		<h2>Comment Syntax</h2>
+		<p class='p2'>
+		My implementation of comments is limited to "a '#' at column zero" in order to minimally change the reference implementation's parsing code.  
+		Note that comments are ignored (not preserved) while parsing JSON, so if you later call <code>JSONObject.toString()</code>, there will be no comments.
+		<em>If you can add greater support for comments, in an elegant manner, 
+			I'd be glad to merge your suggested code.</em>
+		</p>
+		<h1>Copyright</h1>
+		The original work (most Java source files) are Copyright 2002 JSON.org.  
+		Additional work is Copyright 2010-2016 Augur Systems, Inc.  
+		See individual files for specifics.
+	</body>
+</html>

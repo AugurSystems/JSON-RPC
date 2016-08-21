@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2016 Augur Systems, Inc. -->
+<project basedir=".." default="build" name="JSON">
+	<description>
+		A JSON+RPC library.
+	</description>
+	
+	<property name ="company" value="Augur Systems, Inc."/>
+	<property name ="Product-Name" value="JSON"/>
+	<property name ="Product-Version" value="1.0.0"/>
+	<property name ="distDir" value="dist"/>
+	<property name ="src" value="src"/>
+	<property name ="www" value="www"/>
+	<property name ="javacVersion" value="1.8"/>
+	<property name ="classes" value="build/classes"/>
+
+
+
+	<target name="-env">
+		<mkdir dir="${classes}"/>
+		<mkdir dir="${distDir}"/>
+		<antcall target="clean"/>
+		<tstamp><format property="timestamp" pattern="MMMM dd, yyyy hh:mm:ss aa z"/></tstamp>
+	</target>
+
+	<target name="build" description="Build both the core and the &quot;core + HTTP/XML/CDL&quot; libraries.">
+		<antcall target="build-core"/>
+		<antcall target="build-plus"/>
+	</target>
+		
+	<target name="build-plus" description="Includes core plus utils for HTTP headers, and XML/CDL conversions">
+		<antcall target="-env"/>
+		<javac
+			debug="true"
+			debuglevel="lines,source"
+			deprecation="false"
+			srcdir="${src}"
+			destdir="${classes}"
+			source="${javacVersion}"
+			target="${javacVersion}"
+			verbose="false"
+			includeAntRuntime="false"
+		>
+			<include name="com/augur/json/*.java"/>
+		</javac>
+		<jar compress="true" destfile="${distDir}/json+.jar">
+			<manifest>
+				<attribute name="Created-By" value="${company}"/>
+				<attribute name="Product-Name" value="${Product-Name}"/>
+				<attribute name="Product-Version" value="${Product-Version}"/>
+				<attribute name="Product-Build" value="${timestamp}"/>
+			</manifest>
+			<fileset dir="${classes}">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+	</target>
+		
+	<target name="build-core" description="Build just core JSON and RPC classes">
+		<antcall target="-env"/>
+		<javac
+			debug="true"
+			debuglevel="lines,source"
+			deprecation="false"
+			srcdir="${src}"
+			destdir="${classes}"
+			source="${javacVersion}"
+			target="${javacVersion}"
+			verbose="false"
+			includeAntRuntime="false"
+		>
+			<include name="com/augur/json/JSON*.java"/>
+			<include name="com/augur/json/RPC*.java"/>
+			<exclude name="com/augur/json/JSONML.java"/>
+		</javac>
+		<jar compress="true" destfile="${distDir}/json.jar">
+			<manifest>
+				<attribute name="Created-By" value="${company}"/>
+				<attribute name="Product-Name" value="${Product-Name}"/>
+				<attribute name="Product-Version" value="${Product-Version}"/>
+				<attribute name="Product-Build" value="${timestamp}"/>
+			</manifest>
+			<fileset dir="${classes}">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+	</target>
+		
+	
+	<target name="clean">
+		<delete failonerror="false" verbose="false" includeemptydirs="true" >
+			<fileset dir="${classes}" includes="**/*"/>
+		</delete>
+	</target>
+
+
+
+	
+</project>
