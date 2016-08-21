@@ -1,5 +1,5 @@
 # JSON (+RPC)
-This is a fork of the very nice reference implementation by [Douglas Crockford](https://en.wikipedia.org/wiki/Douglas_Crockford), provided at [JSON.org](http://JSON.org), (which is based on [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf), "The JSON Data Interchange Standard" and also documented as [RFC 4627](https://www.ietf.org/rfc/rfc4627.txt)).  Unfortunately, when I asked Mr Crockford via email to consider extending his work to include RPC, he succinctly replied, "I don't believe in RPC."  However, he had previously welcomed me to publish any extensions myself.  So this is my result.  
+This is a fork of the very nice reference implementation by [Douglas Crockford](https://en.wikipedia.org/wiki/Douglas_Crockford), provided at [JSON.org](http://JSON.org), (which is based on [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf), "The JSON Data Interchange Standard" and also documented as [RFC 4627](https://www.ietf.org/rfc/rfc4627.txt)).  Unfortunately, when I asked Mr. Crockford to consider extending his work to include RPC, he succinctly replied, "I don't believe in RPC."  However, he had previously welcomed me to publish any extensions myself.  So this is my result.  
 
 There are three additions to the base code:
 
