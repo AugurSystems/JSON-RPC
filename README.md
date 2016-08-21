@@ -11,7 +11,7 @@ There are three additions to the base code:
 This library should be backward compatible with any projects that used the JSON.org reference implementation.</p>
 
 ## Comment Syntax
-My implementation of comments is limited to "a '#' at column zero" in order to minimally change the reference implementation's parsing code.  Note that comments are ignored (not preserved) while parsing JSON, so if you later call <code>JSONObject.toString()</code>, there will be no comments.
+My implementation of comments is limited to "a '#' at column zero" in order to minimally change the reference implementation's parsing code.  Note that comments are ignored (not preserved) while parsing JSON, so if you later call <code>JSONObject.toString()</code>, there will be no comments.  Note that comments are not part of the official JSON specification, so you'll just have to ignore any corresponding syntax errors flagged by your JSON file editor.
 
 ## Build
 The ANT build script offers two sub-build targets.  The "build-core" target creates "json.jar" comprised of just the JSON and JSON-RPC classes.  That's all you need for most JSON work. 
