@@ -20,7 +20,6 @@
 		<mkdir dir="${classes}"/>
 		<mkdir dir="${distDir}"/>
 		<antcall target="clean"/>
-		<tstamp><format property="timestamp" pattern="MMMM dd, yyyy hh:mm:ss aa z"/></tstamp>
 	</target>
 
 	<target name="build" description="Build both the core and the &quot;core + HTTP/XML/CDL&quot; libraries.">
@@ -43,6 +42,7 @@
 		>
 			<include name="com/augur/json/*.java"/>
 		</javac>
+		<tstamp><format property="timestamp" pattern="MMMM dd, yyyy hh:mm:ss aa z"/></tstamp>
 		<jar compress="true" destfile="${distDir}/json+.jar">
 			<manifest>
 				<attribute name="Created-By" value="${company}"/>
@@ -73,6 +73,7 @@
 			<include name="com/augur/json/RPC*.java"/>
 			<exclude name="com/augur/json/JSONML.java"/>
 		</javac>
+		<tstamp><format property="timestamp" pattern="MMMM dd, yyyy hh:mm:ss aa z"/></tstamp>
 		<jar compress="true" destfile="${distDir}/json.jar">
 			<manifest>
 				<attribute name="Created-By" value="${company}"/>
