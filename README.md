@@ -14,7 +14,11 @@ This library should be backward compatible with any projects that used the JSON.
 My implementation of comments is limited to "a '#' at column zero" in order to minimally change the reference implementation's parsing code.  Note that comments are ignored (not preserved) while parsing JSON, so if you later call <code>JSONObject.toString()</code>, there will be no comments.
 
 ## Build
-The ANT build script offers two sub-build targets.  The "build-core" target creates "json.jar" comprised of just the JSON and JSON-RPC classes.  That's all you need for most JSON work. The "build-plus" target creates "json+.jar" which includes the same core classes, plus JSON translations for XML, CDL (comma-delimited list), and HTTP headers.  Just run 'ant' inside the 'build' directory to build both.  The core json.jar is 40% smaller than the json+.jar file.  (Obviously you only need to use one in your project.)
+The ANT build script offers two sub-build targets.  The "build-core" target creates "json.jar" comprised of just the JSON and JSON-RPC classes.  That's all you need for most JSON work. 
+
+The "build-plus" target creates "json+.jar" which includes the same core classes, plus extras that were included in the original JSON.org library, specifically:  JSON translations for XML, CDL (comma-delimited list), and HTTP headers.  
+
+Just run 'ant' inside the 'build' directory to build both.  The core json.jar is 40% smaller than the json+.jar file.  (Obviously you only need to use one in your project.)
 
 # Copyright
 The original work (most Java source files) are Copyright 2002 JSON.org.  
