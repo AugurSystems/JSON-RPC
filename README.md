@@ -2,11 +2,10 @@
 This is a fork of the very nice reference implementation by [Douglas Crockford](https://en.wikipedia.org/wiki/Douglas_Crockford), provided at [JSON.org](http://JSON.org), (which is based on [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf), "The JSON Data Interchange Standard" and also documented as [RFC 4627](https://www.ietf.org/rfc/rfc4627.txt)).  Unfortunately, when I asked Mr Crockford via email to consider extending his work to include RPC, he succinctly replied, "I don't believe in RPC."  However, he had previously welcomed me to publish any extensions myself.  So this is my result.  
 
 There are three additions to the base code:
-<ol>
-<li>Added three classes to support [JSON-RPC v2.0](http://www.jsonrpc.org): <code>RPCError</code>, <code>RPCRequest</code>, and <code>RPCResponse</code></li>
-<li>Added support for comments in JSON syntax, when a line <strong>begins</strong> (<em>No leading white space!</em>) with a hash mark ('#')</li>
-<li>Added a utility method, <code>JSONObject.keySet()</code></li>
-</ol>
+
+1. Added three classes to support [JSON-RPC v2.0](http://www.jsonrpc.org): <code>RPCError</code>, <code>RPCRequest</code>, and <code>RPCResponse</code></li>
+2. Added support for comments in JSON syntax, when a line <strong>begins</strong> (<em>No leading white space!</em>) with a hash mark ('#')</li>
+3. Added a utility method, <code>JSONObject.keySet()</code></li>
 
 ## Compatibility
 This library should be backward compatible with any projects that used the JSON.org reference implementation.</p>
