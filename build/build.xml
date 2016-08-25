@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2016 Augur Systems, Inc. -->
-<project basedir=".." default="build" name="JSON">
+<project basedir=".." default="build" name="JSON-RPC">
 	<description>
 		A JSON+RPC library.
 	</description>
 	
 	<property name ="company" value="Augur Systems, Inc."/>
-	<property name ="Product-Name" value="JSON"/>
+	<property name ="Product-Name" value="JSON-RPC"/>
 	<property name ="Product-Version" value="1.0.0"/>
 	<property name ="distDir" value="dist"/>
 	<property name ="src" value="src"/>
