@@ -5,7 +5,7 @@ There are three additions to the base code:
 
 1. Added three classes to support [JSON-RPC v2.0](http://www.jsonrpc.org): <code>RPCError</code>, <code>RPCRequest</code>, and <code>RPCResponse</code></li>
 2. Added support for comments in JSON syntax, when a line <strong>begins</strong> (<em>No leading white space!</em>) with a hash mark ('#')</li>
-3. Added a utility method, <code>JSONObject.keySet()</code></li>
+3. Added utility methods, <code>JSONObject.keySet()</code> and <code>JSONObject.putAll()</code></li>
 
 ## Compatibility
 This library should be backward compatible with any projects that used the JSON.org reference implementation.</p>
