@@ -1182,7 +1182,19 @@ public class JSONObject implements Serializable {
         return this;
     }
 
+		
+		/**
+		 * Copies all the key/value pairs from the given JSONObject into this one, 
+		 * replacing existing values if there are key collisions, similar to the 
+		 * action of java.util.Map.putAll().
+		 * @param more The JSONObject whose contents should be copied into this JSONObject.
+		 * @author Added by Chris.Janicki@augur.com
+		 */
+		public void putAll(JSONObject more) {
+			this.map.putAll(more.map);
+		}
 
+		
     /**
      * Put a key/value pair in the JSONObject, but only if the key and the
      * value are both non-null, and only if there is not already a member
