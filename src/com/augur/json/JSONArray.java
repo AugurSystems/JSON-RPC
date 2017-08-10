@@ -30,6 +30,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -782,6 +783,12 @@ public class JSONArray {
         return o;
     }
 
+		
+		/** 
+		 * @return A copy of the underlying JSONArray as a List. 
+		 * @author Added by chris.janicki@augur.com on 24nov2016
+		 */ 
+		public List toList() { return new ArrayList(this.myArrayList); }
 
     /**
      * Produce a JSONObject by combining a JSONArray of names with the values
