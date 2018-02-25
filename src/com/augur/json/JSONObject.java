@@ -35,6 +35,8 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -165,7 +167,7 @@ public class JSONObject implements Serializable {
      * Construct an empty JSONObject.
      */
     public JSONObject() {
-        this.map = new HashMap<String,Object>();
+			this.map = new HashMap<String,Object>();
     }
 
 
@@ -175,8 +177,6 @@ public class JSONObject implements Serializable {
      * Missing keys are ignored.
      * @param jo A JSONObject.
      * @param names An array of strings.
-     * @throws JSONException 
-     * @exception JSONException If a value is a non-finite number or if a name is duplicated.
      */
     public JSONObject(JSONObject jo, String[] names) {
         this();
@@ -218,15 +218,36 @@ public class JSONObject implements Serializable {
 		
 	/**
 	 * Constructs the JSONObject by reading the given file (in UTF-8 encoding).
+	 * @param file The File to load the JSON text
+	 * @throws com.augur.json.JSONException
+	 * @throws java.io.IOException
+	 * @deprecated Use the constructor that accepts a File and a specific Charset instead;
+	 * for example StandardCharsets.ISO_8859_1 (for HTTP POST) or StandardCharsets.UTF_8.
 	 */
 	public JSONObject(File file) throws JSONException, IOException
 	{
-		this(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+		this(file, StandardCharsets.UTF_8);
+	}
+	
+	/**
+	 * Constructs the JSONObject by reading the given file.
+	 * @param file The File to load the JSON text
+	 * @param charset The Charset to decode text from the binary stream
+	 * for example StandardCharsets.ISO_8859_1 (for HTTP POST) or StandardCharsets.UTF_8.
+	 * @throws com.augur.json.JSONException
+	 * @throws java.io.IOException
+	 */
+	public JSONObject(File file, Charset charset) throws JSONException, IOException
+	{
+		this(new InputStreamReader(new FileInputStream(file), charset));
 	}
 	
 		
 	/**
 	 * Constructs a JSONObject from the Reader, and closes the stream.
+	 * @param reader The Reader stream to read the JSON text
+	 * @throws com.augur.json.JSONException
+	 * @throws java.io.IOException
 	 */
 	public JSONObject(Reader reader) throws JSONException, IOException
 	{
@@ -238,12 +259,35 @@ public class JSONObject implements Serializable {
 	
 		
 	/**
-	 * Constructs a JSONObject from the InputStream, and closes the stream.
+	 * Constructs a JSONObject from the InputStream using the system's default decoder (not wise!), 
+	 * and closes the stream.
+	 * @param in The InputStream to read the JSON text
+	 * @throws com.augur.json.JSONException
+	 * @throws java.io.IOException
+	 * @deprecated Use the method that takes a Charset instead; 
+	 * for example StandardCharsets.ISO_8859_1 (for HTTP POST) or StandardCharsets.UTF_8.
 	 */
 	public JSONObject(InputStream in) throws JSONException, IOException
 	{
 		this();
 		JSONTokener x = new JSONTokener(in);
+		parse(x);
+		in.close();
+	}
+	
+		
+	/**
+	 * Constructs a JSONObject from the InputStream, and closes the stream.
+	 * @param in An InputStream to read the JSON text
+	 * @param charset The Charset to decode text from the binary stream
+	 * for example StandardCharsets.ISO_8859_1 (for HTTP POST) or StandardCharsets.UTF_8.
+	 * @throws com.augur.json.JSONException
+	 * @throws java.io.IOException
+	 */
+	public JSONObject(InputStream in, Charset charset) throws JSONException, IOException
+	{
+		this();
+		JSONTokener x = new JSONTokener(in, charset);
 		parse(x);
 		in.close();
 	}

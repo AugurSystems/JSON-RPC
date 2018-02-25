@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /*
 Copyright (c) 2002 JSON.org
@@ -38,11 +40,12 @@ SOFTWARE.
  * @author JSON.org
  * @version 2010-12-24
  * @version 2013-05-06 Edited by Janicki to implement '#' line comments, and upgrade to StringBuilder
+ * @version 2018-02-25 Edited by Janicki to add constructor that takes a CharSet for decoding a stream
  */
 public class JSONTokener {
 
     private int 	character;
-	private boolean eof;
+		private boolean eof;
     private int 	index;
     private int 	line;
     private char 	previous;
@@ -56,8 +59,7 @@ public class JSONTokener {
      * @param reader     A reader.
      */
     public JSONTokener(Reader reader) {
-        this.reader = reader.markSupported() ? 
-        		reader : new BufferedReader(reader);
+        this.reader = reader.markSupported() ? reader : new BufferedReader(reader);
         this.eof = false;
         this.usePrevious = false;
         this.previous = 0;
@@ -68,10 +70,25 @@ public class JSONTokener {
     
     
     /**
-     * Construct a JSONTokener from an InputStream.
+     * Construct a JSONTokener from an InputStream, using the system's default Charset (not wise!)
+		 * @param inputStream An InputStream to read the JSON text
+		 * @throws com.augur.json.JSONException
+		 * @deprecated Use the method that takes a Charset instead; 
+		 * for example StandardCharsets.ISO_8859_1 (for HTTP POST) or StandardCharsets.UTF_8.
      */
     public JSONTokener(InputStream inputStream) throws JSONException {
         this(new InputStreamReader(inputStream));    	
+    }
+
+
+    /**
+     * Construct a JSONTokener from an InputStream, decoding the text via the given Charset.
+		 * @param inputStream An InputStream to read the JSON text
+		 * @param charset The Charset to decode text from the binary stream
+		 * @throws com.augur.json.JSONException
+     */
+    public JSONTokener(InputStream inputStream, Charset charset) throws JSONException {
+        this(new InputStreamReader(inputStream, charset));    	
     }
 
 
