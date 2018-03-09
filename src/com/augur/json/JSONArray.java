@@ -24,9 +24,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Writer;
 import java.lang.reflect.Array;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -185,9 +189,22 @@ public class JSONArray {
         }
     }
     
-    
+		/**
+		 * Constructs the JSONArray by reading the given file.
+		 * @param file The File to load the JSON text
+		 * @param charset The Charset to decode text from the binary stream
+		 * for example StandardCharsets.ISO_8859_1 (for HTTP POST) or StandardCharsets.UTF_8.
+		 * @throws com.augur.json.JSONException
+		 * @throws java.io.IOException
+		 */
+		public JSONArray(File file, Charset charset) throws JSONException, IOException
+		{
+			this(new InputStreamReader(new FileInputStream(file), charset));
+		}
+
+		
     /**
-     * Get the object value associated with an index.
+     * Get the object value associated with a (zero-based) index.
      * @param index
      *  The index must be between 0 and length() - 1.
      * @return An object value.
@@ -248,7 +265,7 @@ public class JSONArray {
 
 
     /**
-     * Get the int value associated with an index.
+     * Get the int value associated with a (zero-based) index.
      *
      * @param index The index must be between 0 and length() - 1.
      * @return      The value.
@@ -268,7 +285,7 @@ public class JSONArray {
 
 
     /**
-     * Get the JSONArray associated with an index.
+     * Get the JSONArray associated with a (zero-based) index.
      * @param index The index must be between 0 and length() - 1.
      * @return      A JSONArray value.
      * @throws JSONException If there is no value for the index. or if the
@@ -285,7 +302,7 @@ public class JSONArray {
 
 
     /**
-     * Get the JSONObject associated with an index.
+     * Get the JSONObject associated with a (zero-based) index.
      * @param index subscript
      * @return      A JSONObject value.
      * @throws JSONException If there is no value for the index or if the
@@ -302,7 +319,7 @@ public class JSONArray {
 
 
     /**
-     * Get the long value associated with an index.
+     * Get the long value associated with a (zero-based) index.
      *
      * @param index The index must be between 0 and length() - 1.
      * @return      The value.
@@ -323,7 +340,7 @@ public class JSONArray {
 
 
     /**
-     * Get the string associated with an index.
+     * Get the string associated with a (zero-based) index.
      * @param index The index must be between 0 and length() - 1.
      * @return      A string value.
      * @throws JSONException If there is no value for the index.
