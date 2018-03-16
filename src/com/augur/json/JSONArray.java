@@ -27,6 +27,7 @@ SOFTWARE.
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.lang.reflect.Array;
@@ -171,6 +172,20 @@ public class JSONArray {
 		}
     }
 
+		
+	/**
+	 * Constructs a JSONArray from the InputStream, and closes the stream.
+	 * @param in An InputStream to read the JSON text
+	 * @param charset The Charset to decode text from the binary stream
+	 * for example StandardCharsets.ISO_8859_1 (for HTTP POST) or StandardCharsets.UTF_8.
+	 * @throws com.augur.json.JSONException
+	 * @throws java.io.IOException
+	 */
+	public JSONArray(InputStream in, Charset charset) throws JSONException, IOException
+	{
+		this(new JSONTokener(in, charset));
+		in.close();
+	}
     
     /**
      * Construct a JSONArray from an array
@@ -199,7 +214,7 @@ public class JSONArray {
 		 */
 		public JSONArray(File file, Charset charset) throws JSONException, IOException
 		{
-			this(new InputStreamReader(new FileInputStream(file), charset));
+			this(new FileInputStream(file), charset);
 		}
 
 		
