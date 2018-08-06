@@ -985,15 +985,27 @@ public class JSONObject implements Serializable {
 
     /**
      * Get an optional JSONArray associated with a key.
-     * It returns null if there is no such key, or if its value is not a
-     * JSONArray.
+     * It returns null if there is no such key, or if its value is not a JSONArray.
      *
      * @param key   A key string.
      * @return      A JSONArray which is the value.
      */
     public JSONArray optJSONArray(String key) {
+        return optJSONArray(key, null);
+    }
+
+
+    /**
+     * Get an optional JSONArray associated with a key.
+     * It returns the defaultValue if there is no such key, or if its value is not a JSONArray.
+     *
+     * @param key   A key string.
+		 * @param defaultValue The JSONArray to return if the given key has no value, or its value is not a JSONArray
+     * @return      A JSONArray which is the value.
+     */
+    public JSONArray optJSONArray(String key, JSONArray defaultValue) {
         Object o = opt(key);
-        return o instanceof JSONArray ? (JSONArray)o : null;
+        return o instanceof JSONArray ? (JSONArray)o : defaultValue;
     }
 
 
@@ -1006,8 +1018,20 @@ public class JSONObject implements Serializable {
      * @return      A JSONObject which is the value.
      */
     public JSONObject optJSONObject(String key) {
+        return optJSONObject(key, null);
+    }
+
+    /**
+     * Get an optional JSONObject associated with a key.
+     * It returns the defaultValue if there is no such key, or if its value is not a JSONObject.
+     *
+     * @param key   A key string.
+		 * @param defaultValue The JSONObject to return if the given key has no value, or its value is not a JSONObject
+     * @return      A JSONObject which is the value.
+     */
+    public JSONObject optJSONObject(String key, JSONObject defaultValue) {
         Object object = opt(key);
-        return object instanceof JSONObject ? (JSONObject)object : null;
+        return object instanceof JSONObject ? (JSONObject)object : defaultValue;
     }
 
 
