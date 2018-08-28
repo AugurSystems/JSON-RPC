@@ -295,7 +295,7 @@ public class JSONObject implements Serializable {
 	
 
 	/** System-dependent line separator (usually '\n' or '\r\n') */
-	public static final String LS = System.getProperty("line.separator");
+	public static final String LS = System.lineSeparator();
 
 
     /**
@@ -1604,9 +1604,9 @@ public class JSONObject implements Serializable {
             while (keys.hasNext()) {
                 key = keys.next();
                 if (sb.length() > 1) {
-                    sb.append(",\n");
+                    sb.append(",").append(LS);
                 } else {
-                    sb.append('\n');
+                    sb.append(LS);
                 }
                 for (i = 0; i < newindent; i += 1) {
                     sb.append(' ');
@@ -1617,7 +1617,7 @@ public class JSONObject implements Serializable {
                         newindent));
             }
             if (sb.length() > 1) {
-                sb.append('\n');
+                sb.append(LS);
                 for (i = 0; i < indent; i += 1) {
                     sb.append(' ');
                 }
