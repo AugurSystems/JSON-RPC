@@ -48,6 +48,12 @@ auxiliary.show.customizer.message=<message>
                     <target>build</target>
                 </action>
             </ide-actions>
+            <export>
+                <type>jar</type>
+                <location>dist/json+.jar</location>
+                <script>${ant.script}</script>
+                <build-target>build</build-target>
+            </export>
             <view>
                 <items>
                     <source-folder style="packages">
@@ -70,6 +76,7 @@ auxiliary.show.customizer.message=<message>
         <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/4">
             <compilation-unit>
                 <package-root>src</package-root>
+                <built-to>dist/json+.jar</built-to>
                 <source-level>1.8</source-level>
             </compilation-unit>
         </java-data>

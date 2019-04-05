@@ -12,7 +12,7 @@
 	<property name ="src" value="src"/>
 	<property name ="www" value="www"/>
 	<property name ="javacVersion" value="1.8"/>
-	<property name ="classes" value="build/classes"/>
+	<property name ="classes" value="${user.home}/tmp/${Product-Name}/classes"/>
 
 
 
