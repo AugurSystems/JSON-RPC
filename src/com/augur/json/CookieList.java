@@ -71,19 +71,16 @@ public class CookieList {
     public static String toString(JSONObject jo) throws JSONException {
         boolean      b = false;
         Iterator     keys = jo.keys();
-        String       string;
-        StringBuffer sb = new StringBuffer();
+        String       k,v;
+        StringBuilder sb = new StringBuilder();
         while (keys.hasNext()) {
-            string = keys.next().toString();
-            if (!jo.isNull(string)) {
-                if (b) {
-                    sb.append(';');
-                }
-                sb.append(Cookie.escape(string));
-                sb.append("=");
-                sb.append(Cookie.escape(jo.getString(string)));
-                b = true;
-            }
+					k = keys.next().toString();
+					v = String.valueOf(jo.get(k)); // valueOf() handles null -> "null"
+					if (b) { sb.append(';'); }
+					sb.append(Cookie.escape(k));
+					sb.append("=");
+					sb.append(Cookie.escape(v));
+					b = true;
         }
         return sb.toString();
     }

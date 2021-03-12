@@ -123,7 +123,7 @@ public class JSONArray {
 	        for (;;) {
 	            if (x.nextClean() == ',') {
 	                x.back();
-	                this.myArrayList.add(JSONObject.NULL);
+	                this.myArrayList.add(null);
 	            } else {
 	                x.back();
 	                this.myArrayList.add(x.nextValue());
@@ -362,18 +362,9 @@ public class JSONArray {
      */
     public String getString(int index) throws JSONException {
         Object object = get(index);
-        return object == JSONObject.NULL ? null : object.toString();
+        return object == null ? null : object.toString();
     }
 
-
-    /**
-     * Determine if the value is null.
-     * @param index The index must be between 0 and length() - 1.
-     * @return true if the value at the index is null, or if there is no value.
-     */
-    public boolean isNull(int index) {
-        return JSONObject.NULL.equals(opt(index));
-    }
 
 
     /**
@@ -795,7 +786,7 @@ public class JSONArray {
             this.myArrayList.set(index, value);
         } else {
             while (index != length()) {
-                put(JSONObject.NULL);
+							put((Object)null);
             }
             put(value);
         }

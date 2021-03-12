@@ -101,52 +101,6 @@ import java.util.TreeSet;
  */
 public class JSONObject implements Serializable {
 
-    /**
-     * JSONObject.NULL is equivalent to the value that JavaScript calls null,
-     * whilst Java's null is equivalent to the value that JavaScript calls
-     * undefined.
-     */
-     private static final class Null {
-
-        /**
-         * There is only intended to be a single instance of the NULL object,
-         * so the clone method returns itself.
-         * @return     NULL.
-         */
-		@Override
-        protected final Object clone() {
-            return this;
-        }
-
-        /**
-         * A Null object is equal to the null value and to itself.
-         * @param object    An object to test for nullness.
-         * @return true if the object parameter is the JSONObject.NULL object
-         *  or null.
-         */
-		@Override
-        public boolean equals(Object object) {
-            return object == null || object == this; // do not check the parameter type for this usage (ignore Netbeans suggestion)
-        }
-
-        /**
-         * Get the "null" string value.
-         * @return The string "null".
-         */
-		@Override
-        public String toString() {
-            return "null";
-        }
-
-
-		@Override
-		public int hashCode()
-		{
-			return 7;
-		}
-
-		}
-
 
     /**
      * The map where the JSONObject's properties are kept.
@@ -155,38 +109,29 @@ public class JSONObject implements Serializable {
 
 
     /**
-     * It is sometimes more convenient and less ambiguous to have a
-     * <code>NULL</code> object than to use Java's <code>null</code> value.
-     * <code>JSONObject.NULL.equals(null)</code> returns <code>true</code>.
-     * <code>JSONObject.NULL.toString()</code> returns <code>"null"</code>.
-     */
-    public static final Object NULL = new Null();
-
-
-    /**
      * Construct an empty JSONObject.
      */
     public JSONObject() {
-			this.map = new HashMap<String,Object>();
+			this.map = new HashMap<>();
     }
 
 
-    /**
-     * Construct a JSONObject from a subset of another JSONObject.
-     * An array of strings is used to identify the keys that should be copied.
-     * Missing keys are ignored.
-     * @param jo A JSONObject.
-     * @param names An array of strings.
-     */
-    public JSONObject(JSONObject jo, String[] names) {
-        this();
-        for (int i = 0; i < names.length; i += 1) {
-            try {
-                putOnce(names[i], jo.opt(names[i]));
-            } catch (Exception ignore) {
-            }
-        }
-    }
+//    /**
+//     * Construct a JSONObject from a subset of another JSONObject.
+//     * An array of strings is used to identify the keys that should be copied.
+//     * Missing keys are ignored.
+//     * @param jo A JSONObject.
+//     * @param names An array of strings.
+//     */
+//    public JSONObject(JSONObject jo, String[] names) {
+//        this();
+//        for (int i = 0; i < names.length; i += 1) {
+//            try {
+//                putOnce(names[i], jo.opt(names[i]));
+//            } catch (Exception ignore) {
+//            }
+//        }
+//    }
 
 		
     /**
@@ -199,7 +144,7 @@ public class JSONObject implements Serializable {
      */
     public JSONObject(Map map) throws JSONException
 		{
-        this.map = new HashMap<String,Object>();
+        this.map = new HashMap<>();
         if (map != null) {
             Iterator i = map.entrySet().iterator();
             while (i.hasNext()) {
@@ -340,7 +285,7 @@ public class JSONObject implements Serializable {
         for (int i = 0; i < names.length; i += 1) {
             String name = names[i];
             try {
-                putOpt(name, c.getField(name).get(object));
+                put(name, c.getField(name).get(object));
             } catch (Exception ignore) {
             }
         }
@@ -451,7 +396,7 @@ public class JSONObject implements Serializable {
             } else if (c != ':') {
                 throw x.syntaxError("Expected a ':' after a key");
             }
-            putOnce(key, x.nextValue());
+            put(key, x.nextValue());
 
 // Pairs are separated by ','. We will also tolerate ';'.
 
@@ -748,7 +693,7 @@ public class JSONObject implements Serializable {
      */
     public String getString(String key) throws JSONException {
         Object object = get(key);
-        return object == NULL ? null : object.toString();
+        return object == null ? null : object.toString();
     }
 
 
@@ -787,18 +732,6 @@ public class JSONObject implements Serializable {
             throw new JSONException("Unable to increment [" + quote(key) + "].");
         }
         return this;
-    }
-
-
-    /**
-     * Determine if the value associated with the key is null or if there is
-     *  no value.
-     * @param key   A key string.
-     * @return      true if there is no value associated with the key or if
-     *  the value is the JSONObject.NULL object.
-     */
-    public boolean isNull(String key) {
-        return JSONObject.NULL.equals(opt(key));
     }
 
 
@@ -1083,7 +1016,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Get an optional string associated with a key.
-     * It returns the defaultValue if there is no such key.
+     * It returns the defaultValue if there is no such key, or the value is null.
      *
      * @param key   A key string.
      * @param defaultValue     The default.
@@ -1091,7 +1024,7 @@ public class JSONObject implements Serializable {
      */
     public String optString(String key, String defaultValue) {
         Object object = opt(key);
-        return NULL.equals(object) ? defaultValue : object.toString();        
+        return object == null ? defaultValue : object.toString();        
     }
 
 
@@ -1227,8 +1160,7 @@ public class JSONObject implements Serializable {
 
 
     /**
-     * Put a key/value pair in the JSONObject. If the value is null,
-     * then the key will be removed from the JSONObject if it is present.
+     * Put a key/value pair in the JSONObject. 
      * @param key   A key string.
      * @param value An object which is the value. It should be of one of these
      *  types: Boolean, Double, Integer, JSONArray, JSONObject, Long, String,
@@ -1241,15 +1173,27 @@ public class JSONObject implements Serializable {
         if (key == null) {
             throw new JSONException("Null key.");
         }
-        if (value != null) {
             testValidity(value);
             this.map.put(key, value);
-        } else {
-            remove(key);
-        }
         return this;
     }
 
+		
+    /**
+     * Put a key=null in the JSONObject. 
+     * @param key   A key string.
+     * @return this.
+     * @throws JSONException if the key is null.
+     */
+    public JSONObject putNull(String key) throws JSONException {
+        if (key == null) {
+            throw new JSONException("Null key.");
+        }
+            this.map.put(key, null);
+        return this;
+    }
+
+		
 		
 		/**
 		 * Copies all the key/value pairs from the given JSONObject into this one, 
@@ -1263,44 +1207,6 @@ public class JSONObject implements Serializable {
 		}
 
 		
-    /**
-     * Put a key/value pair in the JSONObject, but only if the key and the
-     * value are both non-null, and only if there is not already a member
-     * with that name.
-     * @param key
-     * @param value
-     * @return his.
-     * @throws JSONException if the key is a duplicate
-     */
-    public final JSONObject putOnce(String key, Object value) throws JSONException {
-        if (key != null && value != null) {
-            if (opt(key) != null) {
-                throw new JSONException("Duplicate key \"" + key + "\"");
-            }
-            put(key, value);
-        }
-        return this;
-    }
-
-
-    /**
-     * Put a key/value pair in the JSONObject, but only if the
-     * key and the value are both non-null.
-     * @param key   A key string.
-     * @param value An object which is the value. It should be of one of these
-     *  types: Boolean, Double, Integer, JSONArray, JSONObject, Long, String,
-     *  or the JSONObject.NULL object.
-     * @return this.
-     * @throws JSONException If the value is a non-finite number.
-     */
-    public final JSONObject putOpt(String key, Object value) throws JSONException {
-        if (key != null && value != null) {
-            put(key, value);
-        }
-        return this;
-    }
-
-
     /**
      * Produce a string in double quotes with backslash sequences in all the
      * right places. A backslash will be inserted within </, producing <\/,
@@ -1418,7 +1324,7 @@ public class JSONObject implements Serializable {
      * @return An NavigableSet of the keys.
      */
     public NavigableSet<String> sortedKeys() {
-      return new TreeSet<String>(this.map.keySet());
+      return new TreeSet<>(this.map.keySet());
     }
 
     /**
@@ -1438,7 +1344,7 @@ public class JSONObject implements Serializable {
             return Boolean.FALSE;
         }
         if (string.equalsIgnoreCase("null")) {
-            return JSONObject.NULL;
+            return null;
         }
 
         /*
@@ -1455,7 +1361,7 @@ public class JSONObject implements Serializable {
             if (b == '0' && string.length() > 2 &&
                         (string.charAt(1) == 'x' || string.charAt(1) == 'X')) {
                 try {
-                    return new Integer(Integer.parseInt(string.substring(2), 16));
+                    return Integer.parseInt(string.substring(2), 16);
                 } catch (Exception ignore) {
                 }
             }
@@ -1466,7 +1372,7 @@ public class JSONObject implements Serializable {
                 } else {
                     Long myLong = new Long(string);
                     if (myLong.longValue() == myLong.intValue()) {
-                        return new Integer(myLong.intValue());
+                        return myLong.intValue();
                     } else {
                         return myLong;
                     }
@@ -1542,7 +1448,7 @@ public class JSONObject implements Serializable {
                     sb.append(',');
                 }
                 String key = keys.next();
-                sb.append(quote(key.toString()));
+                sb.append(quote(key));
                 sb.append(':');
                 sb.append(valueToString(this.map.get(key)));
             }
@@ -1753,10 +1659,10 @@ public class JSONObject implements Serializable {
      public static Object wrap(Object object) {
          try {
              if (object == null) {
-                 return NULL;
+                 return null;
              }
              if (object instanceof JSONObject || object instanceof JSONArray  || 
-                     NULL.equals(object)      || object instanceof JSONString || 
+                     object instanceof JSONString || 
                      object instanceof Byte   || object instanceof Character  ||
                      object instanceof Short  || object instanceof Integer    ||
                      object instanceof Long   || object instanceof Boolean    || 
@@ -1808,7 +1714,7 @@ public class JSONObject implements Serializable {
                     writer.write(',');
                 }
                 String key = keys.next();
-                writer.write(quote(key.toString()));
+                writer.write(quote(key));
                 writer.write(':');
                 Object value = this.map.get(key);
                 if (value instanceof JSONObject) {

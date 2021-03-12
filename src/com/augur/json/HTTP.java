@@ -127,7 +127,7 @@ public class HTTP {
     public static String toString(JSONObject jo) throws JSONException {
         Iterator     keys = jo.keys();
         String       string;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (jo.has("Status-Code") && jo.has("Reason-Phrase")) {
             sb.append(jo.getString("HTTP-Version"));
             sb.append(' ');
@@ -150,10 +150,10 @@ public class HTTP {
             string = keys.next().toString();
             if (!string.equals("HTTP-Version")      && !string.equals("Status-Code") &&
                     !string.equals("Reason-Phrase") && !string.equals("Method") &&
-                    !string.equals("Request-URI")   && !jo.isNull(string)) {
+                    !string.equals("Request-URI")) {
                 sb.append(string);
                 sb.append(": ");
-                sb.append(jo.getString(string));
+                sb.append(String.valueOf(jo.getString(string))); // valueOf() handles null -> "null" as needed
                 sb.append(CRLF);
             }
         }
