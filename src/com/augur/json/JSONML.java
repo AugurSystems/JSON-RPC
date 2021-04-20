@@ -332,7 +332,7 @@ public class JSONML {
 	        while (keys.hasNext()) {
 	            key = keys.next().toString();
             	XML.noSpace(key);
-	            value = jo.optString(key);
+	            value = jo.optString(key, null);
 	            if (value != null) {
 		            sb.append(' ');
 		            sb.append(XML.escape(key));
@@ -397,7 +397,7 @@ public class JSONML {
 	
 //Emit <tagName
 	
-		tagName = jo.optString("tagName");
+		tagName = jo.optString("tagName",null);
 		if (tagName == null) {
 			return XML.escape(jo.toString());
 		}
@@ -413,7 +413,7 @@ public class JSONML {
             key = keys.next().toString();
             if (!key.equals("tagName") && !key.equals("childNodes")) {
             	XML.noSpace(key);
-	            value = jo.optString(key);
+	            value = jo.optString(key,null);
 	            if (value != null) {
 		            sb.append(' ');
 		            sb.append(XML.escape(key));
