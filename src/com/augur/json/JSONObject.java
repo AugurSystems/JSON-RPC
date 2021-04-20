@@ -1002,16 +1002,17 @@ public class JSONObject implements Serializable {
 
 
     /**
+		 * DELETED: Just causes too many mistaken assumptions that null will be returned if key not found; use the definitive version to specify your default.
      * Get an optional string associated with a key.
      * It returns an empty string if there is no such key. If the value is not
      * a string and is not null, then it is converted to a string.
      *
      * @param key   A key string.
      * @return      A string which is the value.
-     */
     public String optString(String key) {
         return optString(key, "");
     }
+     */
 
 
     /**
