@@ -77,6 +77,10 @@ public class RPCRequest extends JSONObject //implements Externalizable
 	{
 		return id;
 	}
+	
+	public void setRpcID(String id) { this.id = id; }
+	public void setRpcID(int id) { setRpcID(Integer.toString(id)); }
+	
 
 
 	/** Convenience method; same as getJSONRPC(). */

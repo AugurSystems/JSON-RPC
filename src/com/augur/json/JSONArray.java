@@ -601,12 +601,27 @@ public class JSONArray {
     /**
      * Put a value in the JSONArray, where the value will be a
      * JSONArray which is produced from a Collection.
-     * @param value A Collection value.
+		 * Contrast this with putEach(Collection).
+     * @param value A Collection value to be added to this as a whole new JSONArray.
      * @return      this.
+		 * @see putEach(Collection)
      */
     public JSONArray put(Collection value) {
         put(new JSONArray(value));
         return this;
+    }
+
+
+    /**
+     * Put all values from the given Collection into this JSONArray.
+		 * Contrast this with put(Collection).
+     * @param values A Collection of values, each to be added to this JSONArray.
+     * @return      this.
+		 * @see put(Collection)
+     */
+    public JSONArray putEach(Collection values) {
+			for (Object v : values) { put(v); }
+			return this;
     }
 
 
