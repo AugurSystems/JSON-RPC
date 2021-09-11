@@ -624,6 +624,17 @@ public class JSONArray {
 			return this;
     }
 
+    /**
+     * Put all values from the given Collection into this JSONArray.
+		 * Contrast this with put(Collection).
+     * @param values A Collection of values, each to be added to this JSONArray.
+     * @return      this.
+		 * @see put(Collection)
+     */
+    public JSONArray putEach(JSONArray array) {
+			return putEach(array.myArrayList);
+    }
+
 
     /**
      * Append a double value. This increases the array's length by one.
@@ -820,6 +831,8 @@ public class JSONArray {
         this.myArrayList.remove(index);
         return o;
     }
+		
+		public void clear() { this.myArrayList.clear(); }
 
 		
 		/** 
