@@ -115,6 +115,16 @@ public class JSONObject implements Serializable {
 			this.map = new HashMap<>();
     }
 
+		/** 
+		 * Makes a completely independent deep copy of the given JSONObject with no references to the source object or its contents.
+		 * @param src The JSONException to be copied
+		 * @throws JSONException very unlikely or impossible
+		 */
+		public JSONObject(JSONObject src) throws JSONException
+		{
+			this(src.toString());
+		}
+		
 
 //    /**
 //     * Construct a JSONObject from a subset of another JSONObject.

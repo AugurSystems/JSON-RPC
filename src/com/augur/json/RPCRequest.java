@@ -1,5 +1,7 @@
 package com.augur.json;
 
+import java.net.http.HttpRequest;
+
 /**
  * Implements the JSON-RPC specification (version 2.0) for a RPC request object.
  *
@@ -46,6 +48,13 @@ public class RPCRequest extends JSONObject //implements Externalizable
 		super();
 	}
 	
+	/** Used when RPC params come in a GET request query.
+	 * @param params The JSONObject containing the key/value params parsed from a GET request query
+	 * @throws com.augur.json.JSONException */
+	public RPCRequest(JSONObject params) throws JSONException
+	{
+		this(params.toString());
+	}
 	
 	/**
 	 * Used to parse a JSON-RPC request.
@@ -56,20 +65,34 @@ public class RPCRequest extends JSONObject //implements Externalizable
 	public RPCRequest(String request) throws JSONException
 	{
 		super(request);
-
 		// read all KEYS now so JSONExceptions are squeezed out during construction...
-
 		if (has(PARAMS)) params = getJSONObject(PARAMS);
+		else params = new JSONObject(); // for GET request, params are at top level; need to copy into params object
+		jsonrpc=VERSION; // just assume this version, if missing
+		id = null; // default, a "notification"
+		
+		for (String k : keySet())
+		{
+			switch(k)
+			{
+				case PARAMS: break;
+				case JSONRPC: 
+					jsonrpc = getString(JSONRPC); 
+					if (!jsonrpc.equals(VERSION)) throw new JSONException("Bad version.  Expected "+VERSION+", received "+jsonrpc+".");
+					break;
+				case ID: 
+					id=getString(ID); 
+					break;
+				case METHOD: 
+					method = getString(METHOD); 
+					break;
+				default: 
+					params.put(k, remove(k)); // move extras to params {}
+					break; 
+			}
+		}
 
-		if (has(JSONRPC)) jsonrpc = getString(JSONRPC);
-		else throw new JSONException("The 'jsonrpc' key is required.");
-		if (!jsonrpc.equals(VERSION)) throw new JSONException("Bad version.  Expected "+VERSION+", received "+jsonrpc+".");
-
-		if (has(ID)) id = getString(ID);
-		else id = null; // a "notification"
-
-		if (has(METHOD)) method = getString(METHOD);
-		else throw new JSONException("The 'method' key is required.");
+		if (method==null || method.isBlank()) throw new JSONException("The 'method' key is required.");
 	}
 
 
