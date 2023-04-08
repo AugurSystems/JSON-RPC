@@ -1,7 +1,5 @@
 package com.augur.json;
 
-import java.net.http.HttpRequest;
-
 /**
  * Implements the JSON-RPC specification (version 2.0) for a RPC request object.
  *
@@ -66,8 +64,8 @@ public class RPCRequest extends JSONObject //implements Externalizable
 	{
 		super(request);
 		// read all KEYS now so JSONExceptions are squeezed out during construction...
-		if (has(PARAMS)) params = getJSONObject(PARAMS);
-		else params = new JSONObject(); // for GET request, params are at top level; need to copy into params object
+		params = optJSONObject(PARAMS,null);
+		if (params==null) params = new JSONObject(); // for GET request, params are at top level; need to copy into params object
 		jsonrpc=VERSION; // just assume this version, if missing
 		id = null; // default, a "notification"
 		

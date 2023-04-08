@@ -1214,7 +1214,7 @@ public class JSONObject implements Serializable {
 		 * @author Added by Chris.Janicki@augur.com
 		 */
 		public void putAll(JSONObject more) {
-			this.map.putAll(more.map);
+			if (more!=null) this.map.putAll(more.map);
 		}
 
 		
