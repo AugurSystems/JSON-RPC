@@ -90,7 +90,7 @@ public class RPCRequest extends JSONObject //implements Externalizable
 			}
 		}
 
-		if (method==null || method.isBlank()) throw new JSONException("The 'method' key is required.");
+		if (method==null || method.trim().isEmpty()) throw new JSONException("The 'method' key is required.");
 	}
 
 
