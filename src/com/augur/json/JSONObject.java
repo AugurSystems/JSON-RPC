@@ -731,13 +731,13 @@ public class JSONObject implements Serializable {
         if (value == null) {
             put(key, 1);
         } else if (value instanceof Integer) {
-            put(key, ((Integer)value).intValue() + 1);
+            put(key, ((Integer)value) + 1);
         } else if (value instanceof Long) {
-            put(key, ((Long)value).longValue() + 1);                
+            put(key, ((Long)value) + 1);                
         } else if (value instanceof Double) {
-            put(key, ((Double)value).doubleValue() + 1);                
+            put(key, ((Double)value) + 1);                
         } else if (value instanceof Float) {
-            put(key, ((Float)value).floatValue() + 1);                
+            put(key, ((Float)value) + 1);                
         } else {
             throw new JSONException("Unable to increment [" + quote(key) + "].");
         }
@@ -1123,7 +1123,7 @@ public class JSONObject implements Serializable {
      * @throws JSONException If the key is null or if the number is invalid.
      */
     public JSONObject put(String key, double value) throws JSONException {
-        put(key, new Double(value));
+        put(key, Double.valueOf(value));
         return this;
     }
 
@@ -1136,9 +1136,11 @@ public class JSONObject implements Serializable {
      * @return this.
      * @throws JSONException If the key is null.
      */
-    public JSONObject put(String key, int value) throws JSONException {
-        put(key, new Integer(value));
-        return this;
+    public JSONObject put(String key, int value) throws JSONException 
+		{
+			if (key == null) throw new JSONException("Null key.");
+			this.map.put(key, value);
+			return this;
     }
 
 
@@ -1150,9 +1152,11 @@ public class JSONObject implements Serializable {
      * @return this.
      * @throws JSONException If the key is null.
      */
-    public JSONObject put(String key, long value) throws JSONException {
-        put(key, new Long(value));
-        return this;
+    public JSONObject put(String key, long value) throws JSONException 
+		{
+			if (key == null) throw new JSONException("Null key.");
+			this.map.put(key, value);
+			return this;
     }
 
 
@@ -1319,7 +1323,6 @@ public class JSONObject implements Serializable {
 		
 		
 		/**
-		 * Added by Chris Janicki, Dec 1, 2013. 
 		 * Needed in com.augur.trapstation.LogReaderEvents, since the JSONObject is 
 		 * to be reused within a de-serialization/filter loop.
 		 */
@@ -1381,7 +1384,7 @@ public class JSONObject implements Serializable {
                         string.indexOf('e') > -1 || string.indexOf('E') > -1) {
                     return Double.valueOf(string);
                 } else {
-                    Long myLong = new Long(string);
+                    Long myLong = Long.valueOf(string);
                     if (myLong.longValue() == myLong.intValue()) {
                         return myLong.intValue();
                     } else {
