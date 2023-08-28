@@ -474,8 +474,7 @@ public class JSONObject implements Serializable {
         } else if (object instanceof JSONArray) {
             put(key, ((JSONArray)object).put(value));
         } else {
-            throw new JSONException("JSONObject[" + key +
-                    "] is not a JSONArray.");
+            throw new JSONException("Value in ["+quote(key)+"] is not a JSONArray: "+object.getClass());
         }
         return this;
     }
@@ -517,12 +516,12 @@ public class JSONObject implements Serializable {
      */
     public Object get(String key) throws JSONException {
         if (key == null) {
-            throw new JSONException("Null key.");
+           throw new JSONException("Null key.");
         }
         Object object = opt(key);
         if (object == null) {
-            throw new JSONException("JSONObject[" + quote(key) +
-                    "] not found.");
+					if (has(key)) return null;
+					else throw new JSONException("Value at ["+quote(key)+"] not found.");
         }
         return object;
     }
@@ -547,8 +546,7 @@ public class JSONObject implements Serializable {
                 ((String)object).equalsIgnoreCase("true"))) {
             return true;
         }
-        throw new JSONException("JSONObject[" + quote(key) +
-                "] is not a Boolean.");
+        throw new JSONException("Value in ["+quote(key)+"] is not a Boolean: "+object.getClass());
     }
 
 
@@ -566,8 +564,7 @@ public class JSONObject implements Serializable {
                 ((Number)object).doubleValue() :
                 Double.parseDouble((String)object);
         } catch (Exception e) {
-            throw new JSONException("JSONObject[" + quote(key) +
-                "] is not a number.");
+            throw new JSONException("Value in ["+quote(key)+"] is not a number: "+object.getClass());
         }
     }
 
@@ -587,8 +584,7 @@ public class JSONObject implements Serializable {
                 ((Number)object).intValue() :
                 Integer.parseInt((String)object);
         } catch (Exception e) {
-            throw new JSONException("JSONObject[" + quote(key) +
-                "] is not an int.");
+            throw new JSONException("Value in ["+quote(key)+"] is not an int.");
         }
     }
 
@@ -603,11 +599,12 @@ public class JSONObject implements Serializable {
      */
     public JSONArray getJSONArray(String key) throws JSONException {
         Object object = get(key);
-        if (object instanceof JSONArray) {
-            return (JSONArray)object;
+        if (object == null) {
+					if (has(key)) return null;
+					else throw new JSONException("Value at ["+quote(key)+"] not found.");
         }
-        throw new JSONException("JSONObject[" + quote(key) +
-                "] is not a JSONArray.");
+        if (object instanceof JSONArray) { return (JSONArray)object; }
+				else throw new JSONException("Value in ["+quote(key)+"] is not a JSONArray: "+object.getClass());
     }
 
 
@@ -621,11 +618,12 @@ public class JSONObject implements Serializable {
      */
     public JSONObject getJSONObject(String key) throws JSONException {
         Object object = get(key);
-        if (object instanceof JSONObject) {
-            return (JSONObject)object;
+        if (object == null) {
+					if (has(key)) return null;
+					else throw new JSONException("Value at ["+quote(key)+"] not found.");
         }
-        throw new JSONException("JSONObject[" + quote(key) +
-                "] is not a JSONObject.");
+        if (object instanceof JSONObject) { return (JSONObject)object; }
+				else throw new JSONException("Value in ["+quote(key)+"] is not a JSONObject: "+object.getClass());
     }
 
 
@@ -644,8 +642,7 @@ public class JSONObject implements Serializable {
                 ((Number)object).longValue() :
                 Long.parseLong((String)object);
         } catch (Exception e) {
-            throw new JSONException("JSONObject[" + quote(key) +
-                "] is not a long.");
+            throw new JSONException("Value in ["+quote(key)+"] is not a long.");
         }
     }
 
@@ -703,7 +700,14 @@ public class JSONObject implements Serializable {
      */
     public String getString(String key) throws JSONException {
         Object object = get(key);
-        return object == null ? null : object.toString();
+        if (object == null) {
+					if (has(key)) return null;
+					else throw new JSONException("Value at ["+quote(key)+"] not found.");
+        }
+				return object.toString();
+//        if (object instanceof String) { return (String)object; }
+//				else return object.toString();
+//				else throw new JSONException("Value in ["+quote(key)+"] is not a String: "+object.getClass());
     }
 
 
@@ -947,8 +951,11 @@ public class JSONObject implements Serializable {
      * @return      A JSONArray which is the value.
      */
     public JSONArray optJSONArray(String key, JSONArray defaultValue) {
-        Object o = opt(key);
-        return o instanceof JSONArray ? (JSONArray)o : defaultValue;
+			Object object;
+			try { object = get(key); } 
+			catch (JSONException e) { return defaultValue; } // key not found?
+			if (object==null) return null;
+			return object instanceof JSONArray ? (JSONArray)object : defaultValue;
     }
 
 
@@ -973,7 +980,10 @@ public class JSONObject implements Serializable {
      * @return      A JSONObject which is the value.
      */
     public JSONObject optJSONObject(String key, JSONObject defaultValue) {
-        Object object = opt(key);
+        Object object;
+				try { object = get(key); } 
+				catch (JSONException e) { return defaultValue; } // key not found?
+				if (object==null) return null;
         return object instanceof JSONObject ? (JSONObject)object : defaultValue;
     }
 
