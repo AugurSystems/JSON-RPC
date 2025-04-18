@@ -98,6 +98,7 @@ import java.util.TreeSet;
  * </ul>
  * @author JSON.org
  * @version 2010-12-28
+ * @version 2025-04-18 Simplify '#' code, now supporting comment starting anywhere in line
  */
 public class JSONObject implements Serializable {
 
@@ -376,19 +377,12 @@ public class JSONObject implements Serializable {
 		{
         char c;
         String key;
-				// This block extended by Chris Janicki to support comment line(s); this particular change supports comments preceding the object start '{'
-        while ((c = x.nextClean()) != '{') {
-					if (c == '#') // a comment line before the object starts
-					{
-						while ((c = x.next()) != '\n' && c > 0) { } // ignore comment until end of line, or EOF
-					}
-					else { throw x.syntaxError("A JSONObject text must begin with '{'"); }
-        }
+        if ((c=x.nextClean()) != '{') { throw x.syntaxError("A JSONObject must begin with '{' but found '"+JSONTokener.toString(c)+"'"); }
         for (;;) {
             c = x.nextClean();
             switch (c) {
             case 0:
-                throw x.syntaxError("A JSONObject text must end with '}'");
+                throw x.syntaxError("A JSONObject text must end with '}', but reached EOF");
             case '}':
                 return;
             default:
@@ -404,7 +398,7 @@ public class JSONObject implements Serializable {
                     x.back();
                 }
             } else if (c != ':') {
-                throw x.syntaxError("Expected a ':' after a key");
+                throw x.syntaxError("Expected a ':' after a key but found '"+JSONTokener.toString(c)+"'"); 
             }
             put(key, x.nextValue());
 
@@ -421,7 +415,7 @@ public class JSONObject implements Serializable {
             case '}':
                 return;
             default:
-                throw x.syntaxError("Expected a ',' or '}'");
+                throw x.syntaxError("Expected a ',' or '}' but found '"+JSONTokener.toString(c)+"'"); 
             }
         }
 		}
@@ -1225,7 +1219,7 @@ public class JSONObject implements Serializable {
 		 * replacing existing values if there are key collisions, similar to the 
 		 * action of java.util.Map.putAll().
 		 * @param more The JSONObject whose contents should be copied into this JSONObject.
-		 * @author Added by Chris.Janicki@augur.com
+		 * @author Added by Janicki
 		 */
 		public void putAll(JSONObject more) {
 			if (more!=null) this.map.putAll(more.map);

@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Writer;
 import java.lang.reflect.Array;
 import java.nio.charset.Charset;
@@ -85,6 +84,8 @@ import java.util.Map;
 
  * @author JSON.org
  * @version 2010-12-28
+ * @version 2025-04-18 Simplify '#' code, now supporting comment starting anywhere in line;
+ *          replaced deprecated primitive param constructors with valueOf() equivalents
  */
 public class JSONArray {
 
@@ -110,37 +111,31 @@ public class JSONArray {
     public JSONArray(JSONTokener x) throws JSONException {
         this();
         char c;
-				// This block extended by Chris Janicki to support comment line(s); this particular change supports comments preceding the array start '['
-        if ((c = x.nextClean()) != '[') {
-					if (c == '#') // a comment line before the object starts
-					{
-						while ((c = x.next()) != '\n' && c > 0) { } // ignore comment until end of line, or EOF
-					}
-					else { throw x.syntaxError("A JSONArray text must start with '['"); }
-        }
-        if (x.nextClean() != ']') {
+        c = x.nextClean();  
+        if (c != '[' && c>0) { throw x.syntaxError("A JSONArray must start with '[' but found '"+JSONTokener.toString(c)+"'"); }
+        c = x.nextClean();  
+        if (c != ']') {
 	        x.back();
 	        for (;;) {
-	            if (x.nextClean() == ',') {
-	                x.back();
-	                this.myArrayList.add(null);
-	            } else {
-	                x.back();
-	                this.myArrayList.add(x.nextValue());
-	            }
-	            switch (x.nextClean()) {
-	            case ';':
-	            case ',':
-	                if (x.nextClean() == ']') {
-	                    return;
-	                }
-	                x.back();
-	                break;
-	            case ']':
-	            	return;
-	            default:
-	                throw x.syntaxError("Expected a ',' or ']'");
-	            }
+            c = x.nextClean();
+            switch (c) {
+              case 0: throw x.syntaxError("A JSONArray must end with ']', but reached EOF"); // EOF
+              case ',': { this.myArrayList.add(null); continue; }
+              default: { x.back(); this.myArrayList.add(x.nextValue()); }
+            }
+            switch (x.nextClean()) {
+            case ';':
+            case ',':
+                if (x.nextClean() == ']') {
+                    return;
+                }
+                x.back();
+                break;
+            case ']':
+              return;
+            default:
+                throw x.syntaxError("Expected a ',' or ']' but found '"+JSONTokener.toString(c)+"'"); 
+            }
 	        }
         }
     }
@@ -644,7 +639,7 @@ public class JSONArray {
      * @return this.
      */
     public JSONArray put(double value) throws JSONException {
-        Double d = new Double(value);
+        Double d = Double.valueOf(value);
         JSONObject.testValidity(d);
         put(d);
         return this;
@@ -658,7 +653,7 @@ public class JSONArray {
      * @return this.
      */
     public JSONArray put(int value) {
-        put(new Integer(value));
+        put(Integer.valueOf(value));
         return this;
     }
 
@@ -670,7 +665,7 @@ public class JSONArray {
      * @return this.
      */
     public JSONArray put(long value) {
-        put(new Long(value));
+        put(Long.valueOf(value));
         return this;
     }
 
@@ -741,7 +736,7 @@ public class JSONArray {
      * not finite.
      */
     public JSONArray put(int index, double value) throws JSONException {
-        put(index, new Double(value));
+        put(index, Double.valueOf(value));
         return this;
     }
 
@@ -756,7 +751,7 @@ public class JSONArray {
      * @throws JSONException If the index is negative.
      */
     public JSONArray put(int index, int value) throws JSONException {
-        put(index, new Integer(value));
+        put(index, Integer.valueOf(value));
         return this;
     }
 
@@ -771,7 +766,7 @@ public class JSONArray {
      * @throws JSONException If the index is negative.
      */
     public JSONArray put(int index, long value) throws JSONException {
-        put(index, new Long(value));
+        put(index, Long.valueOf(value));
         return this;
     }
 
@@ -837,7 +832,7 @@ public class JSONArray {
 		
 		/** 
 		 * @return A copy of the underlying JSONArray as a List. 
-		 * @author Added by chris.janicki@augur.com on 24nov2016
+		 * @author Added by Augur on 24nov2016
 		 */ 
 		public List toList() { return new ArrayList(this.myArrayList); }
 

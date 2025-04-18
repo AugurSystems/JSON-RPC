@@ -32,6 +32,7 @@ import java.util.Iterator;
  * and to covert a JSONObject into an XML text.
  * @author JSON.org
  * @version 2010-12-24
+ * @version 2025-04-18 Replaced deprecated primitive param constructors with valueOf() equivalents
  */
 public class XML {
 
@@ -328,9 +329,9 @@ public class XML {
                 if (string.indexOf('.') >= 0) {
                     return Double.valueOf(string);
                 } else if (string.indexOf('e') < 0 && string.indexOf('E') < 0) {
-                    Long myLong = new Long(string);
+                    Long myLong = Long.valueOf(string);
                     if (myLong.longValue() == myLong.intValue()) {
-                        return new Integer(myLong.intValue());
+                        return Integer.valueOf(myLong.intValue());
                     } else {
                         return myLong;
                     }

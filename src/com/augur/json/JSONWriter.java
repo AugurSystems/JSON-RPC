@@ -55,6 +55,7 @@ SOFTWARE.
  * This can sometimes be easier than using a JSONObject to build a string.
  * @author JSON.org
  * @version 2010-12-24
+ * @version 2025-04-18 Replaced deprecated primitive param constructors with valueOf() equivalents
  */
 public class JSONWriter {
     private static final int maxdepth = 20;
@@ -296,7 +297,7 @@ public class JSONWriter {
      * @throws JSONException If the number is not finite.
      */
     public JSONWriter value(double d) throws JSONException {
-        return this.value(new Double(d));
+        return this.value(Double.valueOf(d));
     }
 
     /**

@@ -38,8 +38,9 @@ SOFTWARE.
  * JSON source strings.
  * @author JSON.org
  * @version 2010-12-24
- * @version 2013-05-06 Edited by Janicki to implement '#' line comments, and upgrade to StringBuilder
- * @version 2018-02-25 Edited by Janicki to add constructor that takes a CharSet for decoding a stream
+ * @version 2013-05-06 Implement '#' line comments, and upgrade to StringBuilder
+ * @version 2018-02-25 Add constructor that takes a CharSet for decoding a stream
+ * @version 2025-04-18 Simplify '#' code, now supporting comment starting anywhere in line
  */
 public class JSONTokener {
 
@@ -179,34 +180,6 @@ public class JSONTokener {
 	        } 
         }
     	this.index += 1;
-			// The following if block added by Janicki, to implement comment lines (those starting with '#')
-			if (this.character==0 && c == '#')
-			{
-				boolean skippingComment = true;
-				while (skippingComment)
-				{
-					try {
-	            c = this.reader.read();
-	        } catch (IOException exception) {
-	            throw new JSONException(exception);
-	        }
-	        if (c <= 0) { // End of stream
-	        	this.eof = true;
-						skippingComment = false;
-	        	c = 0;
-	        } 
-					else
-					{
-						this.index++;
-						if (c == '\n') 
-						{
-							skippingComment = false;
-							this.line += 1;
-							this.character = 0;
-						}
-					}
-				}
-			}
 			if (this.previous == '\r') 
 			{
 				this.line += 1;
@@ -279,6 +252,7 @@ public class JSONTokener {
     public char nextClean() throws JSONException {
         for (;;) {
             char c = next();
+            if (c == '#')  while ((c = next()) != '\n' && c > 0) { } // ignore comment until end of line, or EOF
             if (c == 0 || c > ' ') {
                 return c;
             }
@@ -493,4 +467,15 @@ public class JSONTokener {
         return " at " + index + " [character " + this.character + " line " + 
         	this.line + "]";
     }
+    
+    /** 
+     * @return the string form of a characters, possibly two characters starting with '^' for chars &lt; 32;
+     * for example 0 becomes "^@", 1 is "^A", 2 is "^B", etc.
+     */
+    static String toString(char c)
+    {
+      if (c<' ') return "^" + ('@'+c);
+      else return Character.toString(c);
+    }
+
 }
