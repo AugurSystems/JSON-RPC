@@ -73,11 +73,11 @@ auxiliary.show.customizer.message=<message>
             </view>
             <subprojects/>
         </general-data>
-        <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/4">
+        <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/5">
             <compilation-unit>
                 <package-root>src</package-root>
                 <built-to>dist/json+.jar</built-to>
-                <source-level>1.8</source-level>
+                <source-level>17</source-level>
             </compilation-unit>
         </java-data>
     </configuration>

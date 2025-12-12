@@ -67,13 +67,9 @@ public class RPCError extends JSONObject implements Externalizable
 	{
 		super();
 		if (message==null) throw new NullPointerException("The message parameter must not be null.");
-		try
-		{
-			put(CODE, errorCode);
-			put(MESSAGE, message);
-			if (data != null) put(DATA, data);
-		}
-		catch (JSONException e) { e.printStackTrace(); } // shouldn't happen in this usage
+    put(CODE, errorCode);
+    put(MESSAGE, message);
+    if (data != null) put(DATA, data);
 	}
 
 
@@ -100,13 +96,9 @@ public class RPCError extends JSONObject implements Externalizable
 	{
 		super();
 		if (message==null) throw new NullPointerException("The message parameter must not be null.");
-		try
-		{
-			put(CODE, errorCode);
-			put(MESSAGE, message);
-			if (data != null) put(DATA, data);
-		}
-		catch (JSONException e) { e.printStackTrace(); } // shouldn't happen in this usage
+    put(CODE, errorCode);
+    put(MESSAGE, message);
+    if (data != null) put(DATA, data);
 	}
 
 	

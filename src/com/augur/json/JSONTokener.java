@@ -76,7 +76,7 @@ public class JSONTokener {
 		 * @deprecated Use the method that takes a Charset instead; 
 		 * for example StandardCharsets.ISO_8859_1 (for HTTP POST) or StandardCharsets.UTF_8.
      */
-    public JSONTokener(InputStream inputStream) throws JSONException {
+    @Deprecated public JSONTokener(InputStream inputStream) throws JSONException {
         this(new InputStreamReader(inputStream));    	
     }
 

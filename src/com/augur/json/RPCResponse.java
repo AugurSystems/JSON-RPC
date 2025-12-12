@@ -33,14 +33,10 @@ public class RPCResponse extends JSONObject implements Externalizable
 	private RPCResponse(String id, Object result, RPCError error) 
 	{
 		super();
-		try
-		{
-			if (result!=null) put(RESULT, result);
-			if (error!=null) put(ERROR, error);
-			put(JSONRPC, VERSION);
-			put(ID, id);
-		}
-		catch (JSONException e) { e.printStackTrace(); } // Unlikely in this private usage.
+    if (result!=null) put(RESULT, result);
+    if (error!=null) put(ERROR, error);
+    put(JSONRPC, VERSION);
+    put(ID, id);
 		//if (id==null) throw new JSONException("The request is a notification ('id' key is null); no response is necessary.");
 	}
 

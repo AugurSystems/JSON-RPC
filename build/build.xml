@@ -11,7 +11,8 @@
 	<property name ="distDir" value="dist"/>
 	<property name ="src" value="src"/>
 	<property name ="www" value="www"/>
-	<property name ="javacVersion" value="1.8"/>
+	<!--property name ="javacVersion" value="1.8"/-->
+	<property name ="javacVersion" value="20"/>
 	<property name ="classes" value="${user.home}/tmp/${Product-Name}/classes"/>
 
 
@@ -35,11 +36,12 @@
 			deprecation="false"
 			srcdir="${src}"
 			destdir="${classes}"
-			source="${javacVersion}"
-			target="${javacVersion}"
+			release="${javacVersion}"
 			verbose="false"
 			includeAntRuntime="false"
 		>
+			<!--*source="${javacVersion}"-->
+			<!--target="${javacVersion}"-->
 			<include name="com/augur/json/*.java"/>
 		</javac>
 		<tstamp><format property="timestamp" pattern="MMMM dd, yyyy hh:mm:ss aa z"/></tstamp>
@@ -64,11 +66,12 @@
 			deprecation="false"
 			srcdir="${src}"
 			destdir="${classes}"
-			source="${javacVersion}"
-			target="${javacVersion}"
+			release="${javacVersion}"
 			verbose="false"
 			includeAntRuntime="false"
 		>
+      <!--*source="${javacVersion}"-->
+      <!--target="${javacVersion}"-->
 			<include name="com/augur/json/JSON*.java"/>
 			<include name="com/augur/json/RPC*.java"/>
 			<exclude name="com/augur/json/JSONML.java"/>

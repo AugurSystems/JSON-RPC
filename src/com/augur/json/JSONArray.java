@@ -937,6 +937,19 @@ public class JSONArray {
     }
 
 
+    /** @return The actual backing ArrayList for this JSONArray */
+    public ArrayList toArrayList() { return myArrayList; }
+    
+    /** @return a new String[] containing the toString() result of each JSONArray member */
+    public String[] toStringArray()
+    {
+      int len = length();
+      String[] a = new String[len];
+      for (int i=0; i<len; i++) { a[i]=myArrayList.get(i).toString(); }
+      return a;
+    }
+    
+    
     /**
      * Write the contents of the JSONArray as JSON text to a writer.
      * For compactness, no whitespace is added.
