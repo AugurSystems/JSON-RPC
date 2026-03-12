@@ -51,6 +51,7 @@
 				<attribute name="Product-Name" value="${Product-Name}"/>
 				<attribute name="Product-Version" value="${Product-Version}"/>
 				<attribute name="Product-Build" value="${timestamp}"/>
+  			<attribute name="Main-Class" value="com.augur.json.Main"/>
 			</manifest>
 			<fileset dir="${classes}">
 				<include name="**/*.class"/>
@@ -74,6 +75,7 @@
       <!--target="${javacVersion}"-->
 			<include name="com/augur/json/JSON*.java"/>
 			<include name="com/augur/json/RPC*.java"/>
+			<include name="com/augur/json/Main.java"/>
 			<exclude name="com/augur/json/JSONML.java"/>
 		</javac>
 		<tstamp><format property="timestamp" pattern="MMMM dd, yyyy hh:mm:ss aa z"/></tstamp>
@@ -83,6 +85,7 @@
 				<attribute name="Product-Name" value="${Product-Name}"/>
 				<attribute name="Product-Version" value="${Product-Version}"/>
 				<attribute name="Product-Build" value="${timestamp}"/>
+  			<attribute name="Main-Class" value="com.augur.json.Main"/>
 			</manifest>
 			<fileset dir="${classes}">
 				<include name="**/*.class"/>
