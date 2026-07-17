@@ -89,6 +89,22 @@ import java.util.Map;
  */
 public class JSONArray {
 
+    private boolean readonly = false;
+    
+    /** Sets the array to read-only, and recurses down to all contained objects too. */
+    public JSONArray setReadOnly() 
+    { 
+      if (!readonly)
+      {
+        readonly=true;
+        for (Object obj : myArrayList)
+        {
+          if (obj instanceof JSONArray j) { j.setReadOnly(); }
+          else if (obj instanceof JSONObject j) { j.setReadOnly(); }
+        }
+      } 
+      return this; 
+    }
 
     /**
      * The arrayList where the JSONArray's properties are kept.
@@ -627,6 +643,7 @@ public class JSONArray {
 		 * @see put(Collection)
      */
     public JSONArray putEach(JSONArray array) {
+      if (readonly) throw new IllegalArgumentException("Read-only.");
 			return putEach(array.myArrayList);
     }
 
@@ -690,6 +707,7 @@ public class JSONArray {
      * @return this.
      */
     public final JSONArray put(Object value) {
+        if (readonly) throw new IllegalArgumentException("Read-only.");
         this.myArrayList.add(value);
         return this;
     }
@@ -799,6 +817,7 @@ public class JSONArray {
      *  an invalid number.
      */
     public JSONArray put(int index, Object value) throws JSONException {
+        if (readonly) throw new IllegalArgumentException("Read-only.");
         JSONObject.testValidity(value);
         if (index < 0) {
             throw new JSONException("JSONArray[" + index + "] not found.");
@@ -822,12 +841,17 @@ public class JSONArray {
      * or null if there was no value.
      */
     public Object remove(int index) {
-    	Object o = opt(index);
+    	if (readonly) throw new IllegalArgumentException("Read-only.");
+      Object o = opt(index);
         this.myArrayList.remove(index);
         return o;
     }
 		
-		public void clear() { this.myArrayList.clear(); }
+		public void clear() 
+    { 
+      if (readonly) throw new IllegalArgumentException("Read-only.");
+      this.myArrayList.clear(); 
+    }
 
 		
 		/** 

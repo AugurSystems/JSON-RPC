@@ -103,6 +103,22 @@ import java.util.TreeSet;
 public class JSONObject implements Serializable 
 {
 
+  private boolean readonly = false;
+
+  /** Sets the object to read-only, and recurses down to all contained objects too. */
+  public JSONObject setReadOnly() 
+  { 
+    if (!readonly)
+    {
+      readonly=true;
+      for (Object obj : map.values())
+      {
+        if (obj instanceof JSONArray j) { j.setReadOnly(); }
+        else if (obj instanceof JSONObject j) { j.setReadOnly(); }
+      }
+    } 
+    return this; 
+  }
 
   /**
    * The map where the JSONObject's properties are kept.
@@ -433,6 +449,7 @@ public static final String LS = System.lineSeparator();
    */
   public JSONObject accumulate(String key, Object value)
   {
+    if (readonly) throw new IllegalArgumentException("Read-only.");
     testValidity(value);
     Object object = opt(key);
     if (object == null) { put(key, value instanceof JSONArray ? new JSONArray().put(value) : value); } 
@@ -455,6 +472,7 @@ public static final String LS = System.lineSeparator();
    */
   public JSONObject append(String key, Object value) 
   {
+    if (readonly) throw new IllegalArgumentException("Read-only.");
     testValidity(value);
     Object object = opt(key);
     if (object == null) { put(key, new JSONArray().put(value)); } 
@@ -759,8 +777,7 @@ public static final String LS = System.lineSeparator();
    * @return A String.
    * @throws JSONException If n is a non-finite number.
    */
-  public static String numberToString(Number number)
-          throws JSONException {
+  public static String numberToString(Number number) throws JSONException {
       if (number == null) {
           throw new JSONException("Null pointer");
       }
@@ -1109,6 +1126,7 @@ public static final String LS = System.lineSeparator();
    */
   public JSONObject put(String key, int value) throws NullPointerException 
   {
+    if (readonly) throw new IllegalArgumentException("Read-only.");
     if (key == null) throw new NullPointerException("Null key.");
     this.map.put(key, value);
     return this;
@@ -1125,6 +1143,7 @@ public static final String LS = System.lineSeparator();
    */
   public JSONObject put(String key, long value) throws NullPointerException 
   {
+    if (readonly) throw new IllegalArgumentException("Read-only.");
     if (key == null) throw new NullPointerException("Null key.");
     this.map.put(key, value);
     return this;
@@ -1156,6 +1175,7 @@ public static final String LS = System.lineSeparator();
    *  or if the key is null.
    */
   public JSONObject put(String key, Object value) throws NullPointerException {
+      if (readonly) throw new IllegalArgumentException("Read-only.");
       if (key == null) {
           throw new NullPointerException("Null key.");
       }
@@ -1172,6 +1192,7 @@ public static final String LS = System.lineSeparator();
    * @throws JSONException if the key is null.
    */
   public JSONObject putNull(String key) throws JSONException {
+      if (readonly) throw new IllegalArgumentException("Read-only.");
       if (key == null) {
           throw new JSONException("Null key.");
       }
@@ -1189,6 +1210,7 @@ public static final String LS = System.lineSeparator();
    * @author Added by Janicki
    */
   public void putAll(JSONObject more) {
+    if (readonly) throw new IllegalArgumentException("Read-only.");
     if (more!=null) this.map.putAll(more.map);
   }
 
@@ -1289,6 +1311,7 @@ public static final String LS = System.lineSeparator();
    * or null if there was no value.
    */
   public Object remove(String key) {
+      if (readonly) throw new IllegalArgumentException("Read-only.");
       return this.map.remove(key);
   }
 
@@ -1299,6 +1322,7 @@ public static final String LS = System.lineSeparator();
    */
   public void clear()
   {
+    if (readonly) throw new IllegalArgumentException("Read-only.");
     this.map.clear();
   }
 
@@ -1643,6 +1667,7 @@ public static final String LS = System.lineSeparator();
    /**
     * Write the contents of the JSONObject as JSON text to a writer.
     * For compactness, no whitespace is added.
+    * You MUST close() the Writer!
     * <p>
     * Warning: This method assumes that the data structure is acyclical.
     *
