@@ -416,7 +416,7 @@ public static final String LS = System.lineSeparator();
       // The key is followed by ':'. We will also tolerate '=' or '=>'.
       c = x.nextClean();
       if (c == '=') { if (x.next() != '>') { x.back(); } } 
-      else if (c != ':') { throw x.syntaxError("Expected a ':' after a key but found '"+JSONTokener.toString(c)+"'"); }
+      else if (c != ':') { throw x.syntaxError("Expected a ':' after a key but found "+badChar(c)); }
       put(key, x.nextValue());
       // Pairs are separated by ','. We will also tolerate ';'.
       switch (x.nextClean()) 
@@ -429,9 +429,16 @@ public static final String LS = System.lineSeparator();
         case '}':
           return;
         default:
-          throw x.syntaxError("Expected a ',' or '}' but found '"+JSONTokener.toString(c)+"'"); 
+          throw x.syntaxError("Expected a ',' or '}' but found "+badChar(c)); 
       }
     }
+  }
+  
+  
+  static String badChar(char c)
+  {
+    String hex = Integer.toHexString(c).toUpperCase();
+    return "'"+JSONTokener.toString(c)+"' (0x"+ (hex.length()%2==1?"0":"") +hex+")";
   }
 
 
@@ -802,7 +809,7 @@ public static final String LS = System.lineSeparator();
   /**
    * Get an optional value associated with a key.
    * @param key   A key string.
-   * @return      An object which is the value, or null if there is no value.
+   * @return      An object which is the value; null if that's what was put, or also null if there is no such property.
    */
   public Object opt(String key) {
       return key == null ? null : this.map.get(key);

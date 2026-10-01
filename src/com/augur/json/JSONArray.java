@@ -150,7 +150,7 @@ public class JSONArray {
             case ']':
               return;
             default:
-                throw x.syntaxError("Expected a ',' or ']' but found '"+JSONTokener.toString(c)+"'"); 
+                throw x.syntaxError("Expected a ',' or ']' but found "+JSONObject.badChar(c)); 
             }
 	        }
         }
